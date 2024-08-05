@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+input {
+  border-radius: 5px;
+}
+
 #iconBlock {
   display: flex;
   align-items: center;
@@ -19,7 +23,7 @@
   display: flex;
   margin: 10px 0px;
   height: 60px;
-  width: 400px;
+  width: 600px;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -38,8 +42,13 @@
 }
 
 table {
-  width: 400px;
+  width: 600px;
   border: 1px solid black;
+}
+
+table img {
+  height: 20px;
+  width: 20px;
 }
 
 td {
