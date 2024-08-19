@@ -5,17 +5,37 @@ const searchBtn = document.getElementById("searchBtn");
 const current = document.getElementById("current");
 const hourly = document.getElementById("hourly");
 const daily = document.getElementById("daily");
+const fahrenheit = document.getElementById("fahrenheit");
+const celsius = document.getElementById("celsius");
 
 searchBtn.addEventListener("click", () => {
   if (input.value != "") {
     clearData();
     getUrl();
     search(url);
+    input.value = "";
   }
 });
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && input.value != "") {
+    clearData();
+    getUrl();
+    search(url);
+    input.value = "";
+  }
+});
+
+fahrenheit.addEventListener("click", () => {
+  if (current.childElementCount > 0) {
+    clearData();
+    getUrl();
+    search(url);
+  }
+});
+
+celsius.addEventListener("click", () => {
+  if (current.childElementCount > 0) {
     clearData();
     getUrl();
     search(url);
@@ -94,6 +114,10 @@ function getIcon(weatherData) {
   div.id = "iconBlock";
   let p = document.createElement("p");
   let temp = Number(weatherData.currentConditions.temp);
+  if (celsius.checked) {
+    fToC(temp);
+    temp = cTemp;
+  }
   let modTemp = Math.round(temp);
   p.textContent = modTemp + "°";
   let img = document.createElement("img");
@@ -121,18 +145,6 @@ function getDescription(weatherData) {
   current.appendChild(div);
 }
 
-function getWind(weatherData) {
-  // let div = document.createElement("div");
-  // let p = document.createElement("p");
-  let windspeed = weatherData.currentConditions.windspeed;
-  let winddir = weatherData.currentConditions.winddir;
-  getDirection(winddir);
-  return (wind = "Winds " + direction + " at " + windspeed + " mph." + " ");
-  // p.textContent = "Winds " + direction + " at " + windspeed + " mph." + " ";
-  // div.appendChild(p);
-  // current.appendChild(div);
-}
-
 function getDirection(num) {
   var val = Math.floor(num / 22.5 + 0.5);
   var arr = [
@@ -154,15 +166,6 @@ function getDirection(num) {
     "NNW",
   ];
   return (direction = arr[val % 16]);
-}
-
-function getWet(weatherData) {
-  // let div = document.createElement("div");
-  // let p = document.createElement("p");
-  let precipprob = weatherData.currentConditions.precipprob;
-  p.textContent = precipprob + "% chance of precipitation.";
-  // div.appendChild(p);
-  // current.appendChild(div);
 }
 
 function getHours(weatherData) {
@@ -205,6 +208,10 @@ function displayHours(hours24) {
 
     let p2 = document.createElement("p");
     let temp = Number(hours24[i].temp);
+    if (celsius.checked) {
+      fToC(temp);
+      temp = cTemp;
+    }
     let modTemp = Math.round(temp);
     p2.textContent = modTemp + "°";
 
@@ -259,14 +266,26 @@ function getTable(weatherData) {
 
     let cell3 = row.insertCell();
     let min = Number(days[i].tempmin);
+    if (celsius.checked) {
+      fToC(min);
+      min = cTemp;
+    }
     let modMin = Math.round(min);
     cell3.textContent = modMin + "°";
     let cell4 = row.insertCell();
     let max = Number(days[i].tempmax);
+    if (celsius.checked) {
+      fToC(max);
+      max = cTemp;
+    }
     let modMax = Math.round(max);
     cell4.textContent = modMax + "°";
   }
   daily.appendChild(table);
+}
+
+function fToC(fahrenheit) {
+  return (cTemp = ((fahrenheit - 32) * 5) / 9);
 }
 
 function getDayOfWeek(date) {
