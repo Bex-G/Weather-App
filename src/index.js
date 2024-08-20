@@ -238,7 +238,7 @@ function getTable(weatherData) {
   let table = document.createElement("table");
   table.classList.add("blue-back");
   let th1 = document.createElement("th");
-  th1.textContent = "10-day forcast:";
+  th1.textContent = "10-day forecast:";
   let th2 = document.createElement("th");
   th2.textContent = "";
   let th3 = document.createElement("th");
