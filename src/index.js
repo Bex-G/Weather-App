@@ -8,6 +8,7 @@ const daily = document.getElementById("daily");
 const fahrenheit = document.getElementById("fahrenheit");
 const celsius = document.getElementById("celsius");
 
+// search on click or 'enter' key
 searchBtn.addEventListener("click", () => {
   if (input.value != "") {
     clearData();
@@ -26,6 +27,7 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+// reload with appropriate conversion on event
 fahrenheit.addEventListener("click", () => {
   if (current.childElementCount > 0) {
     clearData();
@@ -42,8 +44,8 @@ celsius.addEventListener("click", () => {
   }
 });
 
+// remove any children of static HTML elements
 function clearData() {
-  // remove any children of static HTML elements
   if (current.childElementCount > 0) {
     let currentChildren = Array.from(current.children);
     currentChildren.forEach((element) => {
@@ -54,12 +56,14 @@ function clearData() {
         let hourlyChildren = Array.from(hourly.children);
         hourlyChildren.forEach((element) => {
           element.remove();
+          hourly.classList.remove("blue-back");
         });
       });
     });
   }
 }
 
+// api request
 function getUrl() {
   let city = input.value;
   if (city != "") {
@@ -77,9 +81,7 @@ async function search(url) {
     getCurrent(weatherData);
     getIcon(weatherData);
     getDescription(weatherData);
-    // getWind(weatherData);
-    // getWet(weatherData);
-    getHours(weatherData);
+    arrayHours(weatherData);
     getTable(weatherData);
     console.log(weatherData);
   } catch (error) {
@@ -113,6 +115,7 @@ function getIcon(weatherData) {
   let div = document.createElement("div");
   div.id = "iconBlock";
   let p = document.createElement("p");
+  p.id = "currentTemp";
   let temp = Number(weatherData.currentConditions.temp);
   if (celsius.checked) {
     fToC(temp);
@@ -133,6 +136,7 @@ function getDescription(weatherData) {
   let div = document.createElement("div");
   div.id = "description";
   let p = document.createElement("p");
+  p.id = "description";
   let description = weatherData.description;
   let windspeed = weatherData.currentConditions.windspeed;
   let winddir = weatherData.currentConditions.winddir;
@@ -168,7 +172,7 @@ function getDirection(num) {
   return (direction = arr[val % 16]);
 }
 
-function getHours(weatherData) {
+function arrayHours(weatherData) {
   // get array of selected hour data for all of today & tomorrow
   let hours = weatherData.days[0].hours.concat(weatherData.days[1].hours);
   let array = [];
@@ -184,10 +188,10 @@ function getHours(weatherData) {
   let hour = weatherData.currentConditions.datetime.slice(0, 2);
   let stopIndex = Number(hour) + 25;
   let hours24 = array.slice(hour, stopIndex);
-  displayHours(hours24);
+  getHours(hours24);
 }
 
-function displayHours(hours24) {
+function getHours(hours24) {
   for (let i = 0; i < hours24.length; i++) {
     let card = document.createElement("div");
     card.className = "card";
@@ -219,6 +223,7 @@ function displayHours(hours24) {
     card.appendChild(img);
     card.appendChild(p2);
     hourly.appendChild(card);
+    hourly.classList.add("blue-back");
   }
 }
 
@@ -231,6 +236,7 @@ function formatHours(time) {
 
 function getTable(weatherData) {
   let table = document.createElement("table");
+  table.classList.add("blue-back");
   let th1 = document.createElement("th");
   th1.textContent = "10-day forcast:";
   let th2 = document.createElement("th");
