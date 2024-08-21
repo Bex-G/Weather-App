@@ -1,5 +1,3 @@
-import "./styles.css";
-
 const { getDay } = require("date-fns");
 
 const input = document.querySelector("input");
